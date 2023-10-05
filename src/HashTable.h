@@ -64,8 +64,11 @@ namespace csi281 {
         // TIP: Be careful to get a reference to the list at each
         // location in the backing store, so you're modifying
         // the original and not a copy
+        // Note: doesn't matter if you put it at the start of the end of the linked lists
         void put(const K key, const V value) {
             // YOUR CODE HERE
+            // std::find_if will prolly be helpful
+            // thePair.first or second to get Key or Value
         }
         
         // Get the item associated with a particular key
@@ -79,6 +82,8 @@ namespace csi281 {
         // the original and not a copy
         optional<V> get(const K &key) {
             // YOUR CODE HERE
+            // if found: return optional<V>(value)
+            // not found: return nullopt;
         }
         
         // Remove a key and any associated value from the hash table
@@ -129,6 +134,9 @@ namespace csi281 {
         // the backingStore for the first time
         void resize(int cap) {
             // YOUR CODE HERE
+            // if backging store is nullptr, set it to capacity
+            // otherwise create newBS, go thru old entries and put them to new w new capcity
+            list<pair<K, V>>* newBS = new list<pair<K, V>>[capacity];
         }
         
         // hash anything into an integer appropriate for
