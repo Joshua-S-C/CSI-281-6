@@ -96,64 +96,64 @@ TEST_CASE( "Hash Table w/ string int", "[stringint]" ) {
     }
 }
 
-//TEST_CASE( "Hash Table w/ string string", "[stringstring]" ) {
-//    SECTION( "50 strings of a test" ) {
-//        HashTable<string, string> ht1 = HashTable<string, string>(10);
-//        for (int i = 1; i <= 50; i++) {
-//            string s = string(i, 'a');
-//            ht1.put(s, s);
-//        }
-//        auto optValue = ht1.get("aaaaaaaaaaa");
-//        CHECK( optValue.has_value() );
-//        CHECK( optValue.value() == "aaaaaaaaaaa" );
-//        CHECK( ht1.getCount() == 50 );
-//        CHECK( ht1.getCapacity() == 80 );
-//        // change value
-//        ht1.put("aaa", "dog");
-//        optValue = ht1.get("aaa");
-//        CHECK( optValue.has_value() );
-//        CHECK( optValue.value() == "dog" );
-//        CHECK( ht1.getCount() == 50 );
-//        // remove value
-//        ht1.remove("a");
-//        optValue = ht1.get("a");
-//        CHECK( ht1.getCount() == 49 );
-//        CHECK( !optValue.has_value() );
-//        ht1.remove("aaaa");
-//        optValue = ht1.get("aaaa");
-//        CHECK( ht1.getCount() == 48 );
-//        CHECK( !optValue.has_value() );
-//        CHECK( ht1.getCapacity() == 80 );
-//    }
-//}
-//
-//TEST_CASE( "Hash Table w/ int float", "[intfloat]" ) {
-//    SECTION( "50 ints with floats" ) {
-//        HashTable<int, float> ht1 = HashTable<int, float>(10);
-//        for (int i = 1; i <= 50; i++) {
-//            float f = (((float) i) * ((float) i) / 3.0);
-//            ht1.put(i, f);
-//        }
-//        auto optValue = ht1.get(27);
-//        CHECK( optValue.has_value() );
-//        CHECK( ht1.getCount() == 50 );
-//        CHECK( ht1.getCapacity() == 80 );
-//        // change value
-//        ht1.put(45, 2.5);
-//        optValue = ht1.get(45);
-//        CHECK( optValue.has_value() );
-//        CHECK( optValue.value() == 2.5 );
-//        CHECK( ht1.getCount() == 50 );
-//        // remove value
-//        ht1.remove(48);
-//        optValue = ht1.get(48);
-//        CHECK( ht1.getCount() == 49 );
-//        CHECK( !optValue.has_value() );
-//        ht1.remove(2);
-//        optValue = ht1.get(2);
-//        CHECK( ht1.getCount() == 48 );
-//        CHECK( !optValue.has_value() );
-//        CHECK( ht1.getCapacity() == 80 );
-//    }
-//}
+TEST_CASE( "Hash Table w/ string string", "[stringstring]" ) {
+    SECTION( "50 strings of a test" ) {
+        HashTable<string, string> ht1 = HashTable<string, string>(10);
+        for (int i = 1; i <= 50; i++) {
+            string s = string(i, 'a');
+            ht1.put(s, s);
+        }
+        auto optValue = ht1.get("aaaaaaaaaaa");
+        CHECK( optValue.has_value() );
+        CHECK( optValue.value() == "aaaaaaaaaaa" );
+        CHECK( ht1.getCount() == 50 );
+        CHECK( ht1.getCapacity() == 80 );
+        // change value
+        ht1.put("aaa", "dog");
+        optValue = ht1.get("aaa");
+        CHECK( optValue.has_value() );
+        CHECK( optValue.value() == "dog" );
+        CHECK( ht1.getCount() == 50 );
+        // remove value
+        ht1.remove("a");
+        optValue = ht1.get("a");
+        CHECK( ht1.getCount() == 49 );
+        CHECK( !optValue.has_value() );
+        ht1.remove("aaaa");
+        optValue = ht1.get("aaaa");
+        CHECK( ht1.getCount() == 48 );
+        CHECK( !optValue.has_value() );
+        CHECK( ht1.getCapacity() == 80 );
+    }
+}
+
+TEST_CASE( "Hash Table w/ int float", "[intfloat]" ) {
+    SECTION( "50 ints with floats" ) {
+        HashTable<int, float> ht1 = HashTable<int, float>(10);
+        for (int i = 1; i <= 50; i++) {
+            float f = (((float) i) * ((float) i) / 3.0);
+            ht1.put(i, f);
+        }
+        auto optValue = ht1.get(27);
+        CHECK( optValue.has_value() );
+        CHECK( ht1.getCount() == 50 );
+        CHECK( ht1.getCapacity() == 80 );
+        // change value
+        ht1.put(45, 2.5);
+        optValue = ht1.get(45);
+        CHECK( optValue.has_value() );
+        CHECK( optValue.value() == 2.5 );
+        CHECK( ht1.getCount() == 50 );
+        // remove value
+        ht1.remove(48);
+        optValue = ht1.get(48);
+        CHECK( ht1.getCount() == 49 );
+        CHECK( !optValue.has_value() );
+        ht1.remove(2);
+        optValue = ht1.get(2);
+        CHECK( ht1.getCount() == 48 );
+        CHECK( !optValue.has_value() );
+        CHECK( ht1.getCapacity() == 80 );
+    }
+}
 
