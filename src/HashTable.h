@@ -66,27 +66,21 @@ namespace csi281 {
         // the original and not a copy
         // Note: doesn't matter if you put it at the start of the end of the linked lists
         void put(const K key, const V value) {
-            // std::find_if will prolly be helpful
-            // thePair.first or second to get Key or Value
-            
-            // If full
-            if (count + 1 >= capacity)
-                resize(capacity * growthFactor);
-
-            pair<K, V> insert(key, value);
-            // Iterate thru Linked List
-            auto& theList = backingStore[(int)hashKey(key) % capacity]; // Ref to list
-            for (auto p& : theList[i]) {
-                // Overwrites Value
-                if (p.first == insert.first) { 
-                    p.second = insert.second; 
+            // If exists
+            for (auto& p : backingStore[hashKey(key) % capacity]) 
+                // Can use .get prolly
+                if (p.first == key) { 
+                    p.second = value; 
                     return;
                 }
-                
-            }
 
+            // If doesn't exist
+            backingStore[hashKey(key) % capacity].push_back(pair<K, V>(key, value));
 
             count++;
+
+            if (getLoadFactor() > MAX_LOAD_FACTOR)
+                resize(capacity * growthFactor);
         }
         
         // Get the item associated with a particular key
@@ -99,28 +93,10 @@ namespace csi281 {
         // location in the backing store, so you're modifying
         // the original and not a copy
         optional<V> get(const K &key) {
-            // if found: return optional<V>(value)
-            // go to index of hash and look thru linked list
-            // not found: return nullopt;
-
-            optional<V> answer;
-
-            // Iterate thru Linked List
-            for (auto p : backingStore[(int)hashKey(key) % capacity]) {
-                if (p.first == key) return optional<V>(p.second);
-            }
-            return nullopt;
+            for (auto& p : backingStore[hashKey(key) % capacity])
+                if (p.first == key) return make_optional(p.second);
             
-            // this is the actual code but I cant get the value
-            /*optional<V> answer = backingStore[hashKey(key)].second;
-            return answer;*/
-
-
-            // Old v
-            //if (backingStore[hashKey(key)].second == NULL)
-            //    return answer; // Use optional thing here
-            //answer = backingStore[hashKey(key)].second;
-            //return answer;
+            return nullopt;
         }
         
         // Remove a key and any associated value from the hash table
@@ -130,9 +106,16 @@ namespace csi281 {
         // location in the backing store, so you're modifying
         // the original and not a copy
         void remove(const K &key) {
-            // YOUR CODE HERE
-            auto& theList = backingStore[(int)hashKey(key) % capacity]; // Ref to list
-            //theList.erase(std::remove_if(theList.begin(), theList.end(), [&](auto& p) {return something; }), theList.end());
+            int index = hashKey(key) % capacity; // okay Im making an index variable now lol
+
+            // Taken from the link above
+            backingStore[index].erase(
+                remove_if(backingStore[index].begin(),
+                backingStore[index].end(), 
+                [&key](pair<K, V> data) { return data.first == key; }),
+                backingStore[index].end());
+
+            count--;
         }
         
         // Calculate and return the load factor
@@ -172,26 +155,37 @@ namespace csi281 {
         // new backing store of size cap, or create
         // the backingStore for the first time
         void resize(int cap) {
+            list<pair<K, V>>* newBS = new list<pair<K, V>>[cap];
+            
             // If empty, make BS at capacity
             if (backingStore == nullptr) {
-                list<pair<K, V>>* newBS = new list<pair<K, V>>[cap];
                 capacity = cap;
+                backingStore = newBS;
                 return;
-            }
+            }   // wow this would be a good place for an else!
+            
+            K key;
+            V value;
 
-            // otherwise create newBS, go thru old entries and put them to new w new capcity
-            list<pair<K, V>>* newBS = new list<pair<K, V>>[cap];
-            for (size_t i = 0; i < capacity; i++) {
-                // Get old KV
-                K key = backingStore[i].first;
-                V value = backingStore[i].second;
+            // otherwise go thru old entries and put them to new w new capcity
+            for (int i = 0; i < capacity; i++)
+                for (auto p : backingStore[i]) {
+                    newBS[hashKey(p.first) % cap].push_back(pair<K, V>(p.first, p.second));
+                    
+                    //auto& bs = newBS[hashKey(key) % cap];
 
-                // Add old KV to new BS
-                newBS[hashKey(key) % cap].put(key, value);
-            }
+                    // Get old KV
+                    //key = p.first;
+                    //value = p.second;
 
-            // Delete old and change to new?
+                    // Add old KV to new BS
+                    //newBS[hashKey(key) % cap].put(key, value);
+                    //newBS[hashKey(key) % cap].first;
+                    //bs.first = p.first;
+                }
+
             capacity = cap;
+            backingStore = newBS;
         }
         
         // hash anything into an integer appropriate for
